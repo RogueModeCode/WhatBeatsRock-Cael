@@ -20,8 +20,8 @@ app.get("/api/whatbeatsrock/:item1/:item2", async (req, res) => {
       {
         role: "user",
         content:
-          `You will be given two objects. Return the emoji representing the first object 
-           given. Also, determine which is the winning object using reasonable logic as 
+          `You will be given two objects. Return the emoji representing the second object 
+           given (it will never be rock). Also, determine which is the winning object using reasonable logic as 
            well as an explanation with a max of 2 short sentences about 
            why the winning object won, but make sure you aren't too wordy. Here's two 
            examples of how to return it (in json).
