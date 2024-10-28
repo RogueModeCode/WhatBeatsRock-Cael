@@ -18,9 +18,29 @@ app.get("/api/whatbeatsrock/:item1/:item2", async (req, res) => {
     model: "gpt-4o-mini",
     messages: [
       {
-        role: "system",
+        role: "user",
         content:
-          "You are a friendly and polite grandfatherly person. You will be given two things, determine a winner using reasonable logic, returning only the winning thing without the word 'winner' or any special characters. Skip a line, then throw in some witty coment while explaining which one of the objects would win a battle. Explain in 2 sentences or less.",
+          `You will be given two objects. Return the emoji representing the first object 
+           given. Also, determine which is the winning object using reasonable logic as 
+           well as an explanation with a max of 2 short sentences about 
+           why the winning object won, but make sure you aren't too wordy. Here's two 
+           examples of how to return it (in json).
+           
+               given: 'paper, rock'
+               return:
+            {
+               "emoji" : "📝"
+               "winner" : "paper"
+               "details" : "paper covers rock in the classic game of rock, paper, scissors, so of course paper wins."
+            }
+
+             given: 'ant, rock'
+             return:
+            {
+               "emoji" : "🐜"
+               "winner" : "rock"
+               "details" : "rocks can easily crush ants, they stand no chance against a rock's mass."
+            }`,
       },
       {
         role: "user",
@@ -30,10 +50,11 @@ app.get("/api/whatbeatsrock/:item1/:item2", async (req, res) => {
   });
   console.log(completion.choices);
 
-  const result = completion.choices[0].message.content;
-  const resultComponents = result.split("\n\n");
-  const winner = resultComponents[0];
-  const explanation = resultComponents[1];
+  const content = completion.choices[0].message.content;
+  const result = JSON.parse(content);
+  const winner = result.winner;
+  const emoji = result.emoji;
+  const details = result.details;
 
   console.log(
     "Someone requested something from the /whatbeatsrock/item1/:item2 route."
@@ -43,7 +64,8 @@ app.get("/api/whatbeatsrock/:item1/:item2", async (req, res) => {
     item1: item1,
     item2: item2,
     winner: winner,
-    explanation: explanation,
+    emoji: emoji,
+    details: details,
   });
 });
 
